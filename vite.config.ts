@@ -46,17 +46,27 @@ export default defineConfig({
     //   filename: "visualizer.html", // 生成的报告文件名称
     // }),
   ],
+  // css: { // 主题定制
+  //   preprocessorOptions: {
+  //     less: {
+  //       modifyVars: {
+  //         'arcoblue-6': '#f65b19',
+  //       },
+  //       javascriptEnabled: true,
+  //     },
+  //   },
+  // },
   build: {
     rollupOptions: {
-      //   // external: ["monaco-editor"],
+      // external: ["monaco-editor"],
       output: {
         manualChunks: {
           vue: ['vue'],
           arcoUi: ['@arco-design/web-vue'],
         },
-        //     // globals: {
-        //     //   "monaco-editor": "monaco",
-        //     // },
+        // globals: {
+        //   "monaco-editor": "monaco",
+        // },
       },
     },
     minify: 'terser',
