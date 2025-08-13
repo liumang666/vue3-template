@@ -45,8 +45,7 @@
     ],
     "*.{ts,vue}": [
       "eslint --cache --color --fix",
-      "prettier --write",
-      "git add ."
+      "prettier --write"
     ]
   }
 }
