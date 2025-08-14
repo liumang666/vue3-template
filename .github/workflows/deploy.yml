@@ -6,7 +6,7 @@ on: # 触发事件
       - main
 
 jobs: # 定义作业
-  build-and-deploy: # 作业 ID
+  build: # 作业 ID
     runs-on: ubuntu-latest # 运行环境m ubuntu-latest是 github actions 提供使用的环境名称之一（最新的 Ubuntu 版本）
 
     # strategy: # 步骤2
@@ -49,13 +49,27 @@ jobs: # 定义作业
       - name: Build
         run: pnpm build # 假设打包命令是 `npm run build`
 
-      # 部署到 GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: upload-artifact # 上传打包产物
+        # 专为GitHub Pages部署优化：仅用于上传静态网站文件（如HTML、CSS、JS），并确保文件格式符合GitHub Pages的部署要求。
+        # 上传阶段：使用upload-pages-artifact将静态文件打包为Artifact并上传至GitHub临时存储。
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # 打包输出的目录（根据项目调整）
-          commit_message: 'Deploy to GitHub Pages'
+          path: './dist' # 自动将dist/目录打包为符合要求的tar.gz文件
+
+  deploy: # 作业 ID
+    needs: build # 依赖于 build 作业
+    runs-on: ubuntu-latest # 运行环境m ubuntu-latest是 github actions 提供使用的环境名称之一（最新的 Ubuntu 版本）
+    steps:
+      # 部署到 GitHub Pages
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v3 # 默认推送到gh-pages分支。如果gh-pages分支不存在，会自动创建
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./dist # 打包输出的目录（根据项目调整）
+      #     commit_message: 'Deploy to GitHub Pages'
+      - name: Deploy to GitHub Pages
+        # 部署阶段：deploy-pages@v4从临时存储中获取Artifact，并将其发布到GitHub Pages指定的环境（如github-pages）。
+        uses: actions/deploy-pages@v4
 
       # 生成 master tag
       - name: Create Master Tag
