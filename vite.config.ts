@@ -10,6 +10,7 @@ import { vitePluginForArco } from '@arco-plugins/vite-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/vue3-template/', // github Action自动部署到github page,所以需要修改base,默认是 /
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
