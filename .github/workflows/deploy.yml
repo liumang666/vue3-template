@@ -83,10 +83,19 @@ jobs: # 定义作业
 
       # 生成 master tag
       - name: Create Master Tag
+        if: ${{ success() }} # 仅当部署成功时执行
         # github-actions[bot]   GitHub 官方机器人的标准用户名
         # github-actions[bot]@users.noreply.github.com  GitHub 机器人的专用无回复邮箱
+
+        # 获取最新 Tag（如 v1.0.0）
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "main-$(date +'%Y%m%d%H%M%S')" -m "Auto-generated master tag"
-          git push origin --tags
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION=$(echo $LATEST_TAG | sed 's/v//')
+          MAJOR=$(echo $VERSION | cut -d'.' -f1)
+          MINOR=$(echo $VERSION | cut -d'.' -f2)
+          PATCH=$(echo $VERSION | cut -d'.' -f3)
+          NEW_PATCH=$((PATCH + 1))
+          NEW_TAG="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+
+          git tag -a $NEW_TAG -m "Release $NEW_TAG"
+          git push origin $NEW_TAG
