@@ -53,16 +53,6 @@ jobs: # 定义作业
       - name: Build
         run: pnpm build # 假设打包命令是 `npm run build`
 
-      # 生成 master tag
-      - name: Create Master Tag
-        # github-actions[bot]   GitHub 官方机器人的标准用户名
-        # github-actions[bot]@users.noreply.github.com  GitHub 机器人的专用无回复邮箱
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "main-$(date +'%Y%m%d%H%M%S')" -m "Auto-generated master tag"
-          git push origin --tags
-
       - name: upload-artifact # 上传打包产物
         # 专为GitHub Pages部署优化：仅用于上传静态网站文件（如HTML、CSS、JS），并确保文件格式符合GitHub Pages的部署要求。
         # 上传阶段：使用upload-pages-artifact将静态文件打包为Artifact并上传至GitHub临时存储。
@@ -74,6 +64,12 @@ jobs: # 定义作业
     needs: build # 依赖于 build 作业
     runs-on: ubuntu-latest # 运行环境m ubuntu-latest是 github actions 提供使用的环境名称之一（最新的 Ubuntu 版本）
     steps:
+      # 代码检出是为了，部署成功后，自动生成tag，自作自动部署不需要配置这个
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取完整历史记录，以便操作 Tag
+
       # 部署到 GitHub Pages
       # - name: Deploy to GitHub Pages
       #   uses: peaceiris/actions-gh-pages@v3 # 默认推送到gh-pages分支。如果gh-pages分支不存在，会自动创建
@@ -84,3 +80,13 @@ jobs: # 定义作业
       - name: Deploy to GitHub Pages
         # 部署阶段：deploy-pages@v4从临时存储中获取Artifact，并将其发布到GitHub Pages指定的环境（如github-pages）。
         uses: actions/deploy-pages@v4
+
+      # 生成 master tag
+      - name: Create Master Tag
+        # github-actions[bot]   GitHub 官方机器人的标准用户名
+        # github-actions[bot]@users.noreply.github.com  GitHub 机器人的专用无回复邮箱
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "main-$(date +'%Y%m%d%H%M%S')" -m "Auto-generated master tag"
+          git push origin --tags
