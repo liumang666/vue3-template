@@ -27,13 +27,13 @@ jobs: # 定义作业
       #     node-version: ${{ matrix.node-version }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4 # 官方 Node.js setup action ,为之后使用npm install | npm run build 做准备
+        uses: actions/setup-node@v4 # 官方 Node.js setup action
         with:
           node-version: '20'
       - name: Setup pnpm
         uses: pnpm/action-setup@v2 # 官方 pnpm setup action
         with:
-          node-version: 9
+          version: 9
 
       # 安装依赖并打包
       # - name: Install and Build
@@ -47,7 +47,7 @@ jobs: # 定义作业
         run: pnpm ci # 等同于 pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm run build # 假设打包命令是 `npm run build`
+        run: pnpm build # 假设打包命令是 `npm run build`
 
       # 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
