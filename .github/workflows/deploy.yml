@@ -53,6 +53,16 @@ jobs: # 定义作业
       - name: Build
         run: pnpm build # 假设打包命令是 `npm run build`
 
+      # 生成 master tag
+      - name: Create Master Tag
+        # github-actions[bot]   GitHub 官方机器人的标准用户名
+        # github-actions[bot]@users.noreply.github.com  GitHub 机器人的专用无回复邮箱
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "main-$(date +'%Y%m%d%H%M%S')" -m "Auto-generated master tag"
+          git push origin --tags
+
       - name: upload-artifact # 上传打包产物
         # 专为GitHub Pages部署优化：仅用于上传静态网站文件（如HTML、CSS、JS），并确保文件格式符合GitHub Pages的部署要求。
         # 上传阶段：使用upload-pages-artifact将静态文件打包为Artifact并上传至GitHub临时存储。
@@ -74,13 +84,3 @@ jobs: # 定义作业
       - name: Deploy to GitHub Pages
         # 部署阶段：deploy-pages@v4从临时存储中获取Artifact，并将其发布到GitHub Pages指定的环境（如github-pages）。
         uses: actions/deploy-pages@v4
-
-      # 生成 master tag
-      - name: Create Master Tag
-        # github-actions[bot]   GitHub 官方机器人的标准用户名
-        # github-actions[bot]@users.noreply.github.com  GitHub 机器人的专用无回复邮箱
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "main-$(date +'%Y%m%d%H%M%S')" -m "Auto-generated master tag"
-          git push origin --tags
