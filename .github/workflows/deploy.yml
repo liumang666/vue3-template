@@ -26,10 +26,10 @@ jobs: # 定义作业
       #   with:
       #     node-version: ${{ matrix.node-version }}
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4 # 官方 Node.js setup action ,为之后使用npm install | npm run build 做准备
-      #   with:
-      #     node-version: '18'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # 官方 Node.js setup action ,为之后使用npm install | npm run build 做准备
+        with:
+          node-version: '20'
       - name: Setup pnpm
         uses: pnpm/action-setup@v2 # 官方 pnpm setup action
         with:
