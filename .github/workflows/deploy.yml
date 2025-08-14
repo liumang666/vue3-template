@@ -44,7 +44,7 @@ jobs: # 定义作业
       # - name: Install Dependencies
       #   run: npm install # 等同于 npm install --frozen-lockfile
       - name: Install Dependencies
-        run: pnpm ci # 等同于 pnpm install --frozen-lockfile
+        run: pnpm install # 等同于 pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm build # 假设打包命令是 `npm run build`
