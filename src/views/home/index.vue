@@ -1,5 +1,5 @@
 <template>
-  <div>index</div>
+  <div>测试actions general close write</div>
 
   <a-button
     type="primary"
