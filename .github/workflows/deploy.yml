@@ -47,6 +47,7 @@ jobs: # 定义作业
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist # 打包输出的目录（根据项目调整）
+          publish_branch: main # 指定目标分支（例如 main）
           commit_message: 'Deploy to GitHub Pages'
 
       # 生成 master tag
