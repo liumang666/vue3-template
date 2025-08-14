@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages # 工作流名称
+
+on: # 触发事件
+  push: # 推送的时候
+    branches: # 推送触发工作流的分支
+      - main
+
+jobs: # 定义作业
+  build-and-deploy: # 作业 ID
+    runs-on: ubuntu-latest # 运行环境m ubuntu-latest是 github actions 提供使用的环境名称之一（最新的 Ubuntu 版本）
+
+    # strategy: # 步骤2
+    #   matrix: # 矩阵策略（并行测试多个 Node 版本）
+    #     node-version: [14.x, 16.x, 18.x]
+
+    steps: # 步骤序列
+      # 检出代码
+      - name: Checkout Code
+        uses: actions/checkout@v4 # 使用官方检出 Action
+        with:
+          fetch-depth: 0 # 获取完整历史记录（用于生成 tag）
+
+      # 设置 Node.js 环境（如果是前端项目）
+      # - name: Use Node.js ${{ matrix.node-version }} # 步骤2：设置 Node 环境
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 安装依赖并打包
+      # - name: Install and Build
+      #   run: |
+      #     npm install
+      #     npm run build # 假设打包命令是 `npm run build`
+      - name: Install Dependencies
+        run: npm ci # 等同于 npm install --frozen-lockfile
+
+      - name: Install Build
+        run: npm run build # 假设打包命令是 `npm run build`
+
+      # 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # 打包输出的目录（根据项目调整）
+          commit_message: 'Deploy to GitHub Pages'
+
+      # 生成 master tag
+      - name: Create Master Tag
+        # github-actions[bot]   GitHub 官方机器人的标准用户名
+        # github-actions[bot]@users.noreply.github.com  GitHub 机器人的专用无回复邮箱
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "main-$(date +'%Y%m%d%H%M%S')" -m "Auto-generated master tag"
+          git push origin --tags
