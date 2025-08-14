@@ -36,10 +36,10 @@ jobs: # 定义作业
       #     npm install
       #     npm run build # 假设打包命令是 `npm run build`
       - name: Install Dependencies
-        run: pnpm ci # 等同于 npm install --frozen-lockfile
+        run: npm install # 等同于 npm install --frozen-lockfile
 
-      - name: Install Build
-        run: pnpm run build # 假设打包命令是 `npm run build`
+      - name: Build
+        run: npm run build # 假设打包命令是 `npm run build`
 
       # 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
