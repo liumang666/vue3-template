@@ -6,6 +6,7 @@ on: # 触发事件
       - main
 
 permissions:
+  contents: write # 允许写入代码（包括 Tag）
   pages: write # 允许写入 GitHub Pages
   id-token: write # 允许生成 OIDC 令牌（关键！）
 
