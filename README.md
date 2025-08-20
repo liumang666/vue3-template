@@ -8,21 +8,6 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 1、需要vscode 安装eslint 插件
 2、配置 .vscode/setting.json文件
-// 编辑器实时校验配置
-{
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue"
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "eslint.workingDirectories": ["./src"] // 指定校验目录
-}
-
 3、项目配置 eslint.config.ts
 
 # 安装 eslint-config-prettier 并在 eslint.config.ts 中使用，禁用 eslint 样式规则，只使用prettier样式规则
