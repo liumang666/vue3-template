@@ -35,6 +35,7 @@ jobs: # 定义作业
         uses: actions/setup-node@v4 # 官方 Node.js setup action
         with:
           node-version: '20'
+          # cache: 'pnpm'
       - name: Setup pnpm
         uses: pnpm/action-setup@v2 # 官方 pnpm setup action
         with:
